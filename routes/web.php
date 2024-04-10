@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -28,11 +29,20 @@ Route::get('/login', function(){
 });
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
-//------ 
+//------ USER
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [UserController::class, 'profile']);
+
     Route::get('/editProfile', [UserController::class, 'edit']);
     Route::post('/editProfile', [UserController::class, 'saveEditProfile']);
+
+    Route::get('/changePassword', function(){
+        return view('profile.password_change');
+    });
+    Route::post('/changePassword', [UserController::class, 'changePassword']);
+
+    // -----POSTS
+    Route::post('/sendPost', [PostController::class, 'createPost'])->name('sendPost');
     
 });
 

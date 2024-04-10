@@ -4,12 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Contracts\PostService;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\MessageBag;
+use App\Services\PostServiceDefault;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
 
     public function register(Request $request){
 
@@ -67,13 +76,18 @@ class UserController extends Controller
     public function profile(){
 
         $user = Auth::user();
-        return view('profile.profile', ['user' => $user]);
+        $posts = $user->UsersPosts;
+        $ShowPosts = $this->postService->ShowPosts($posts, $user);
+        $ShowPosts = html_entity_decode($ShowPosts);
+
+        return view('profile.profile', ['user' => $user, 'posts' => $ShowPosts]);
 
     }//end profile method
 
     public function edit(){
 
         $user = Auth::user();
+        // $posts = $user->UsersPosts;
         return view('profile.edit', ['user' => $user]);
 
     }//end edit method
@@ -98,5 +112,35 @@ class UserController extends Controller
 
         return view('profile.edit', ['notification' => 'Profile Updated Successfully', 'user' => $data]);
         
-    }//end saveEditProfile method
+    }//end saveEditProfile method 
+
+    public function changePassword(Request $request){
+
+        $inputFields = $request -> validate([
+            'password' => ['required', 'min:8'],
+            'newPassword' => ['required', 'min:8'],
+            'newPassword2' => [],
+        ]);
+
+        if($inputFields['newPassword'] !== $inputFields['newPassword2']){
+            $errors = new MessageBag(['newPassword2' => 'Password mismatch']);
+            return redirect()->back()->withErrors($errors);
+        }
+
+        $user = Auth::user();
+        $data = User::find($user->id);
+
+        if(!Hash::check($inputFields['password'], $data->password)){
+            $errors = new MessageBag(['password' => 'Wrong Password']);
+            return redirect()->back()->withErrors($errors);            
+        }
+        
+        $data->password = bcrypt($inputFields['newPassword']);
+        $data->save(); 
+
+        
+        $posts = $user->UsersPosts;
+        return view('profile.profile', ['user' => $user, 'posts' => $posts]);
+
+    }//end changePassword method 
 }

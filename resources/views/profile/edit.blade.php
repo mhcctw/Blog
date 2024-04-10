@@ -32,7 +32,7 @@
                   <div class="row">
                     <div class="col-lg-12">
                       <fieldset>
-                        <input type="name" name="name" id="name" placeholder="Your Name..." autocomplete="on" value="{{ $user['name'] }}">
+                        <input type="text" name="name" id="name" placeholder="Your Name..." autocomplete="on" value="{{ $user['name'] }}">
                       </fieldset>
                     </div>
                     <div class="col-lg-12">
@@ -66,7 +66,7 @@
 
             <div class="col-lg-2 col-md-4 col-sm-4 order-sm-2 order-md-2 order-lg-3" >
               <div class="main-button" style="margin-bottom: 20px">
-                  <a href="#">Change Password</a>
+                  <a href="/changePassword">Change Password</a>
               </div>              
             </div>
 

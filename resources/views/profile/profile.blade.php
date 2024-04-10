@@ -10,7 +10,6 @@
             <div class="col-lg-4 col-md-4 col-sm-8 order-sm-1 order-md-1 order-lg-1">
               <div class="team-member">
                 <div class="main-content">
-                  {{-- <img src="assets/images/member-01.jpg" alt=""> --}}
                   <img src="{{ (!empty($user['photo'])) ? url('assets/images/avatars/'.$user['photo']) : url('assets/images/no_image.png') }}" alt="Avatar">
                   <h4>{{$user['name']}}</h4>
                   
@@ -18,15 +17,18 @@
               </div>
             </div>
             {{-- End Profile Information --}}
+
             {{-- Post --}}
             <div class="col-lg-6 col-md-12 col-sm-12 order-sm-3 order-md-3 order-lg-2">
                 <div class="contact-us-content">
-                  <form id="contact-form" action="" method="post">
+
+                  <form id="contact-form" >
+                    @csrf
                     <div class="row">
                       
                       <div class="col-lg-12">
                         <fieldset>
-                          <textarea name="message" id="message" placeholder="Your Message"  style="height: 170px"></textarea>
+                          <textarea name="text" id="text" placeholder="Type Something"  style="height: 170px"></textarea>
                         </fieldset>
                       </div>
                       <div class="col-lg-12">
@@ -34,8 +36,10 @@
                           <button type="submit" id="form-submit" class="orange-button">Send Post</button>
                         </fieldset>
                       </div>
+                      
                     </div>
                   </form>
+                  
                 </div>
               </div>
             {{-- End Post --}}
@@ -57,13 +61,52 @@
       </div>
 
 
-
-
-
 </div>
 
-<script>
-    $('#Profile').addClass('active');
+{{-- USER'S POSTS --}}
+
+<div class="section events" id="events">
+  <div class="container">
+    <div class="row" id="ShowPostsDiv">
+      {!!$posts!!}
+    </div>
+  </div>
+</div>
+
+{{-- END OF USER'S POSTS --}}
+
+
+<script type="text/javascript">
+  $('#Profile').addClass('active');
+
+
+
+  $(document).ready(function () {
+    $('#contact-form').submit(function (e) {
+      e.preventDefault();     
+
+      var formData = $(this).serialize(); 
+
+      $.ajax({
+        url: '{{ route("sendPost") }}', 
+        type: 'POST', 
+        data: formData, 
+        success: function (response) {
+
+          $('#contact-form')[0].reset();
+
+          $('#ShowPostsDiv').html(response.posts);
+
+        },
+        error: function (xhr, status, error) {
+          console.error(xhr.responseText); 
+        }
+      });
+
+     
+    });
+  });
+
 </script>
 
 @include('footer')

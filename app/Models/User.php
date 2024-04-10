@@ -44,4 +44,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function UsersPosts(){        
+        
+        return $this->hasMany(Post::class, 'user_id', 'id')->orderBy('created_at', 'desc');
+        
+    }
 }
