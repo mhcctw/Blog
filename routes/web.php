@@ -15,9 +15,11 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+// Route::get('/', function () {
+//     return view('index');
+// });
+
+Route::get('/', [UserController::class, 'index']);
 
 Route::get('/register', function(){
     return view('register');
@@ -31,7 +33,7 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 
 //------ USER
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [UserController::class, 'profile']);
+    Route::get('/profile/{user}', [UserController::class, 'profile']);
 
     Route::get('/editProfile', [UserController::class, 'edit']);
     Route::post('/editProfile', [UserController::class, 'saveEditProfile']);
@@ -43,6 +45,9 @@ Route::middleware('auth')->group(function () {
 
     // -----POSTS
     Route::post('/sendPost', [PostController::class, 'createPost'])->name('sendPost');
+    Route::post('/deletePost/{post}', [PostController::class, 'deletePost']);
+    Route::get('/editPost/{post}', [PostController::class, 'ShowEditPost']);
+    Route::put('/updatePost/{post}', [PostController::class, 'UpdatePost'])->name('updatePost');
     
 });
 

@@ -20,6 +20,16 @@ class UserController extends Controller
         $this->postService = $postService;
     }
 
+    public function index(){
+        
+        if(Auth::user()){
+            $user = Auth::user();
+            return view('index', ['userAuth' => $user]);
+        }else{
+            return view('index');
+        }
+    }
+
     public function register(Request $request){
 
         $inputFields = $request -> validate([
@@ -73,14 +83,13 @@ class UserController extends Controller
         return redirect('/');
     }// end logout method
 
-    public function profile(){
+    public function profile(User $user){
 
-        $user = Auth::user();
+        $userAuth = Auth::user();
         $posts = $user->UsersPosts;
-        $ShowPosts = $this->postService->ShowPosts($posts, $user);
-        $ShowPosts = html_entity_decode($ShowPosts);
+        $ShowPosts = $this->postService->ShowPosts($posts, $user);        
 
-        return view('profile.profile', ['user' => $user, 'posts' => $ShowPosts]);
+        return view('profile.profile', ['user' => $user, 'posts' => $ShowPosts, 'userAuth' => $userAuth] );
 
     }//end profile method
 
@@ -140,7 +149,7 @@ class UserController extends Controller
 
         
         $posts = $user->UsersPosts;
-        return view('profile.profile', ['user' => $user, 'posts' => $posts]);
+        return view('profile.profile', ['user' => $user, 'posts' => $posts, 'userAuth' => $user]);
 
     }//end changePassword method 
 }

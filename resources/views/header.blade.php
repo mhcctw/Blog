@@ -71,21 +71,7 @@ https://templatemo.com/tm-586-scholar
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
                             <li class="scroll-to-section"><a href="/" id='Feed'>Feed</a></li>
-                            <li class="scroll-to-section"><a href="/profile" id='Profile'>Profile</a></li>  <!-- class="active" -->
-                            {{-- <form action="/profile" method="post">
-                              @csrf
-                              <li class="scroll-to-section">
-                                <button type="submit" style="padding: 0;
-                                border: none;
-                                font: inherit;
-                                color: inherit;
-                                background-color: transparent;">
-                                  <a id='Profile'>
-                                    Profile
-                                  </a>
-                                </button>
-                              </li>
-                            </form> --}}
+                            <li class="scroll-to-section"><a href="/profile/{{$userAuth['id']}}" id='Profile'>Profile</a></li>  <!-- class="active" -->
                             <!-- ***** logout Start ***** -->
                             <form action="/logout" method="get">
                               @csrf
