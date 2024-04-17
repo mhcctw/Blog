@@ -12,19 +12,38 @@ class PostServiceDefault implements PostService
 {
     public static function ShowPosts(Object $posts, User $user){
         if(!isset($posts)){
-            $string = '<div class="col-lg-12 text-center">
+
+            if($user->id==Auth::user()->id){
+                $string = '<div class="col-lg-12 text-center">
                             <div class="section-heading">          
                             <h2>You don\'t have any posts yet</h2>
                             </div>
                         </div>';
+            }else{
+                $string = '<div class="col-lg-12 text-center">
+                            <div class="section-heading">          
+                            <h2>'. $user->name .' didn\'t post anything yet</h2>
+                            </div>
+                        </div>';
+            }          
 
 
         }else{
-            $string = '<div class="col-lg-12 text-center">
+
+            if($user->id==Auth::user()->id){
+                $string = '<div class="col-lg-12 text-center">
                             <div class="section-heading">          
                             <h2>Your Posts:</h2>
                             </div>
                         </div>';
+            }else{
+                $string = '<div class="col-lg-12 text-center">
+                            <div class="section-heading">          
+                            <h2>'. $user->name .'\'s Posts:</h2>
+                            </div>
+                        </div>';
+            }
+            
             
 
             foreach ($posts as $post){

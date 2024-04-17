@@ -19,7 +19,7 @@
             {{-- End Profile Information --}}
 
             {{-- Post --}}
-            @if($user->id == $userAuth->id)
+            @if($user->id == Auth::user()->id)
             <div class="col-lg-6 col-md-12 col-sm-12 order-sm-3 order-md-3 order-lg-2">
                 <div class="contact-us-content">
 
@@ -54,12 +54,12 @@
                   <a href="#">Follows</a>
                 </div>
 
-                @if($user->id == $userAuth->id)
+                @if($user->id == Auth::user()->id)
                   <div class="main-button" style="margin-bottom: 20px">
                     <a href="/editProfile">Edit Profile</a>
                   </div>
                 @endif
-                
+
             </div>
             
           </div>

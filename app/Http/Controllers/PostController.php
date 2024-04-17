@@ -75,7 +75,7 @@ class PostController extends Controller
         $ShowPosts = $this->postService->ShowPosts($posts, $user);
         
 
-        return view('profile.profile', ['user' => $user, 'posts' => $ShowPosts, 'userAuth' => $user]);
+        return view('profile.profile', ['user' => $user, 'posts' => $ShowPosts]);
 
 
     }// end method UpdatePost

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Contracts\PostService;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use App\Services\PostServiceDefault;
 use Illuminate\Support\Facades\Auth;
@@ -20,15 +21,15 @@ class UserController extends Controller
         $this->postService = $postService;
     }
 
-    public function index(){
+    // public function index(){
         
-        if(Auth::user()){
-            $user = Auth::user();
-            return view('index', ['userAuth' => $user]);
-        }else{
-            return view('index');
-        }
-    }
+    //     if(Auth::user()){
+    //         $user = Auth::user();
+    //         return view('index', ['userAuth' => $user]);
+    //     }else{
+    //         return view('index');
+    //     }
+    // }
 
     public function register(Request $request){
 
@@ -72,8 +73,7 @@ class UserController extends Controller
             return redirect()->back()->withErrors($errors);
         }
 
-        return redirect('/login');
-        
+        return redirect('/login');        
         
     }// end login method
 
@@ -85,21 +85,20 @@ class UserController extends Controller
 
     public function profile(User $user){
 
-        $userAuth = Auth::user();
+        // $userAuth = Auth::user();
         $posts = $user->UsersPosts;
         $ShowPosts = $this->postService->ShowPosts($posts, $user);        
 
-        return view('profile.profile', ['user' => $user, 'posts' => $ShowPosts, 'userAuth' => $userAuth] );
+        return view('profile.profile', ['user' => $user, 'posts' => $ShowPosts] );
 
     }//end profile method
 
     public function edit(){
 
         $user = Auth::user();
-        // $posts = $user->UsersPosts;
         return view('profile.edit', ['user' => $user]);
 
-    }//end edit method
+    }//end edit method (opens view to edit)
 
     public function saveEditProfile(Request $request) {
         $id = Auth::user()->id;
@@ -149,7 +148,23 @@ class UserController extends Controller
 
         
         $posts = $user->UsersPosts;
-        return view('profile.profile', ['user' => $user, 'posts' => $posts, 'userAuth' => $user]);
+        return view('profile.profile', ['user' => $user, 'posts' => $posts]);
 
     }//end changePassword method 
+
+    public function search(Request $request){
+
+        $inputFields = $request->validate([
+            'searchText' => 'required'
+        ]);
+
+        $searchText = strip_tags($inputFields['searchText']);
+
+        $foundUsers = User::where('name', 'like', "%$searchText%")->get();
+
+        
+
+        return view('search', ['foundUsers' => $foundUsers, 'searchText' => $searchText]);
+
+    }//end search method
 }

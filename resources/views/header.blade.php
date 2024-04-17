@@ -60,8 +60,9 @@ https://templatemo.com/tm-586-scholar
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Serach Start ***** -->
                     <div class="search-input">
-                        <form id="search" action="#">
-                            <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword" onkeypress="handle" />
+                        <form id="search" action="/search" method="get">
+                          @csrf
+                            <input type="text" placeholder="Type Something" id='searchText' name="searchText" onkeypress="handle" />
                             <i class="fa fa-search"></i>
                         </form>
                     </div>
@@ -71,7 +72,7 @@ https://templatemo.com/tm-586-scholar
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
                             <li class="scroll-to-section"><a href="/" id='Feed'>Feed</a></li>
-                            <li class="scroll-to-section"><a href="/profile/{{$userAuth['id']}}" id='Profile'>Profile</a></li>  <!-- class="active" -->
+                            <li class="scroll-to-section"><a href="/profile/{{Auth::user()->id}}" id='Profile'>Profile</a></li>  <!-- class="active" -->
                             <!-- ***** logout Start ***** -->
                             <form action="/logout" method="get">
                               @csrf

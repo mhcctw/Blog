@@ -15,11 +15,12 @@ use App\Http\Controllers\UserController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('index');
-// });
+// Route::get('/', [UserController::class, 'index']);
+Route::get('/', function(){
+    return view('index');
+});
 
-Route::get('/', [UserController::class, 'index']);
+Route::get('/search', [UserController::class, 'search']);
 
 Route::get('/register', function(){
     return view('register');
