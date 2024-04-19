@@ -109,6 +109,46 @@ img {
   overflow: hidden;
 }
 
+/* User's styles */
+
+.violet-btn{
+  background: #7a6ad8;
+  color: #fff;  
+  border:none;
+  padding: 0px 25px;
+  border-radius: 20px;
+  transition: all .3s;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  line-height: 40px;
+}
+
+.violet-btn:hover{
+  background: #fff;
+  color: #7a6ad8;  
+  transition: all .3s;
+}
+
+.white-btn{
+  background: #fff;
+  color: #7a6ad8; 
+  border:none;
+  padding: 0px 25px;
+  border-radius: 20px;
+  transition: all .3s;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  line-height: 40px;
+}
+
+.white-btn:hover{
+  background: #7a6ad8;
+  color: #fff;  
+  transition: all .3s;
+}
+
 /* 
 ---------------------------------------------
 Global Styles

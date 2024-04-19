@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class PostServiceDefault implements PostService
 {
     public static function ShowPosts(Object $posts, User $user){
-        if(!isset($posts)){
+        if(count($posts)==0){
 
             if($user->id==Auth::user()->id){
                 $string = '<div class="col-lg-12 text-center">
@@ -33,13 +33,13 @@ class PostServiceDefault implements PostService
             if($user->id==Auth::user()->id){
                 $string = '<div class="col-lg-12 text-center">
                             <div class="section-heading">          
-                            <h2>Your Posts:</h2>
+                            <h2>Your posts:</h2>
                             </div>
                         </div>';
             }else{
                 $string = '<div class="col-lg-12 text-center">
                             <div class="section-heading">          
-                            <h2>'. $user->name .'\'s Posts:</h2>
+                            <h2>'. $user->name .'\'s posts:</h2>
                             </div>
                         </div>';
             }
@@ -47,13 +47,13 @@ class PostServiceDefault implements PostService
             
 
             foreach ($posts as $post){
-                $string.='<div class="col-lg-12 col-md-6" style="margin-bottom:60px;">
+                $string.='<div class="col-lg-12 col-md-12" style="margin-bottom:60px;">
                             <div class="item">
                                 <div class="row">';
 
                 // user's avatar                
                 $string .= '<div class="col-lg-1">
-                                <img style="border-radius:50%;" src="'.(!empty($user['photo']) ? url('assets/images/avatars/'.$post->user->photo) : url('assets/images/no_image.png')).'" alt="avatar">
+                                <img style="border-radius:50%; max-width:100px;" src="'.(!empty($user['photo']) ? url('assets/images/avatars/'.$post->user->photo) : url('assets/images/no_image.png')).'" alt="avatar">
                             </div>';
 
                 // name and date

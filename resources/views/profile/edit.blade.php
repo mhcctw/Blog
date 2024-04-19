@@ -53,7 +53,7 @@
                           </fieldset>
                         </div>
                         <div class="col-3 " style="margin-top:15px;">                          
-                          <a href="/profile" style="color:white;">Cancel</a>                          
+                          <a href="/profile/{{Auth::user()->id}}" style="color:white;">Cancel</a>                          
                         </div>
                       </div>
                     </div>

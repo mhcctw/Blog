@@ -45,9 +45,27 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function UsersPosts(){        
-        
-        return $this->hasMany(Post::class, 'user_id', 'id')->orderBy('created_at', 'desc');
-        
+    // All user's posts
+    public function UsersPosts(){
+
+        return $this->hasMany(Post::class, 'user_id', 'id')->orderBy('created_at', 'desc');        
+    }
+
+    // All user's subscriptions
+    public function subscribers()
+    {
+        return $this->hasMany(Subscription::class, 'follow')->orderBy('created_at', 'desc');
+    }
+
+    // All user's subscriptions
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class, 'user_id')->orderBy('created_at', 'desc');
+    }
+
+    // Check subscription for chosen user $targetUserId
+    public function isSubscribedTo(int $targetUserId): bool
+    {
+        return $this->subscriptions()->where('follow', $targetUserId)->exists();
     }
 }

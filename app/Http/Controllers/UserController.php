@@ -3,33 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Contracts\PostService;
+use App\Contracts\UserService;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use App\Services\PostServiceDefault;
+use App\Services\UserServiceDefault;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     protected $postService;
+    protected $userService;
 
-    public function __construct(PostService $postService)
+    public function __construct(PostService $postService, UserService $userService)
     {
         $this->postService = $postService;
+        $this->userService = $userService;
     }
-
-    // public function index(){
-        
-    //     if(Auth::user()){
-    //         $user = Auth::user();
-    //         return view('index', ['userAuth' => $user]);
-    //     }else{
-    //         return view('index');
-    //     }
-    // }
 
     public function register(Request $request){
 
@@ -160,11 +155,57 @@ class UserController extends Controller
 
         $searchText = strip_tags($inputFields['searchText']);
 
-        $foundUsers = User::where('name', 'like', "%$searchText%")->get();
-
+        $foundUsersOld = User::where('name', 'like', "%$searchText%")->get();   
         
+        
+        $foundUsers = $this->userService->FindSearch($searchText);
+        // dd($foundUsers);
+
+        // $userService = new UserServiceDefault();
+        // $foundUsers=$userService->FindSearch($searchText);
 
         return view('search', ['foundUsers' => $foundUsers, 'searchText' => $searchText]);
 
     }//end search method
+
+    // Follow user button
+    public function follow(Request $request){
+
+        $user_id = $request['user_id'];
+        $auth_user_id = Auth::user()->id;
+
+        if(User::find($user_id)){
+
+            // unfollow
+            $Subscription = Subscription::where('user_id', $auth_user_id)->where('follow', $user_id)->get();
+
+            if(count($Subscription)>0){
+
+                Subscription::where('user_id', $auth_user_id)
+                ->where('follow', $user_id)
+                ->delete();
+
+                return response()->json(['text' => 'Follow', 'error' => 0]);
+
+            }else{// follow
+
+                Subscription::create([
+                    'user_id' => $auth_user_id,
+                    'follow' => $user_id 
+                ]);
+
+                return response()->json(['text' => 'Unfollow', 'error' => 0]);
+            } 
+
+        }else{
+            return response()->json(['error' => 1]);
+        }
+
+    }//end follow method
+
+    public function followers(User $user){
+
+        return view('profile.followers');
+
+    }
 }

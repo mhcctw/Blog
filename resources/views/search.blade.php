@@ -18,7 +18,9 @@
     <div class="container">
       <div class="row">
 
-        @foreach ($foundUsers as $foundUser) 
+        {!!$foundUsers!!}
+
+        {{-- @foreach ($foundUsers as $foundUser) 
         
             <div class="col-lg-12 col-md-6">
             <div class="item" style="margin-bottom: 96px; min-height:165px;">
@@ -33,7 +35,6 @@
                 <div class="col-lg-9">
                     <ul>
                     <li>
-                        {{-- <span class="category">Web Design</span> --}}
                         <h4>{{$foundUser->name}}</h4>
                     </li>
                     <li>
@@ -56,10 +57,14 @@
             </div>
             </div>
 
-        @endforeach
+        @endforeach --}}
 
       </div>
     </div>
   </div>
+
+  <script type="text/javascript">
+    console.log('foundUsers - '+{{$foundUsers}});
+  </script>
 
 @include('footer')

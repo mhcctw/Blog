@@ -12,7 +12,28 @@
                 <div class="main-content">
                   <img src="{{ (!empty($user['photo'])) ? url('assets/images/avatars/'.$user['photo']) : url('assets/images/no_image.png') }}" alt="Avatar">
                   <h4>{{$user['name']}}</h4>
-                  
+
+                  {{-- Subscription --}}
+                  @if($user->id !== Auth::user()->id)
+                    <div class="main-button">
+                      <form id="follow">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{ $user['id'] }}">
+                        @if (Auth::user()->isSubscribedTo($user['id']))
+                          <button type="submit" id='follow_btn' class="white-btn">                          
+                              Unfollow
+                          </button> 
+                          @else
+                            <button type="submit" id='follow_btn' class="violet-btn">                          
+                              Follow
+                            </button>                               
+                          @endif 
+                      </form>
+                                        
+                    </div>
+                  @endif
+                  {{-- End Subscription --}}
+
                 </div>
               </div>
             </div>
@@ -47,12 +68,15 @@
             {{-- End Post --}}
 
             <div class="col-lg-2 col-md-4 col-sm-4 order-sm-2 order-md-2 order-lg-3" >
+
+                {{-- Follows and Followers --}}
                 <div class="main-button" style="margin-bottom: 20px">
-                    <a href="#">Followers</a>
+                    <a href="/followers/{{$user['id']}}">Followers</a>
                 </div>
                 <div class="main-button" style="margin-bottom: 20px">
                   <a href="#">Follows</a>
                 </div>
+                {{-- End Follows and Followers --}}
 
                 @if($user->id == Auth::user()->id)
                   <div class="main-button" style="margin-bottom: 20px">
@@ -83,14 +107,17 @@
 
 
 <script type="text/javascript">
-  $('#Profile').addClass('active');
 
+  @if($user->id == Auth::user()->id)
+    $('#Profile').addClass('active');
+  @endif
 
-
+  // Send Post
   $(document).ready(function () {
-    $('#contact-form').submit(function (e) {
-      e.preventDefault();     
 
+    $('#contact-form').submit(function (e) {
+
+      e.preventDefault();
       var formData = $(this).serialize(); 
 
       $.ajax({
@@ -108,10 +135,55 @@
           console.error(xhr.responseText); 
         }
       });
-
      
     });
+
+
+    // Follow
+    $('#follow').submit(function (e) {
+
+      e.preventDefault();
+      var formData = $(this).serialize();
+
+      $.ajax({
+        url: '{{ route("follow") }}', 
+        type: 'POST', 
+        data: formData,
+        success: function (response) {
+
+          console.log(response);
+
+          if(!response.error){
+
+            $('#follow_btn').html(response.text);
+            if(response.text=='Follow'){
+              $('#follow_btn').addClass('violet-btn');
+              $('#follow_btn').removeClass('white-btn');
+            }else{
+              $('#follow_btn').addClass('white-btn');
+              $('#follow_btn').removeClass('violet-btn');
+            }
+
+          }else{
+            alert('Sorry, something went wrong... Try againt later.')
+          }
+
+          
+
+        },
+        error: function (xhr, status, error) {
+          console.error(xhr.responseText); 
+        }
+      });
+
+      });
+
+
   });
+
+
+  
+  
 
 </script>
 
