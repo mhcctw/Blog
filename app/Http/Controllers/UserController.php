@@ -159,10 +159,6 @@ class UserController extends Controller
         
         
         $foundUsers = $this->userService->FindSearch($searchText);
-        // dd($foundUsers);
-
-        // $userService = new UserServiceDefault();
-        // $foundUsers=$userService->FindSearch($searchText);
 
         return view('search', ['foundUsers' => $foundUsers, 'searchText' => $searchText]);
 
@@ -205,7 +201,17 @@ class UserController extends Controller
 
     public function followers(User $user){
 
-        return view('profile.followers');
+        $foundUsers = $this->userService->FindFollowers($user);
+
+        return view('profile.followers', ['foundUsers' => $foundUsers, 'user' => $user]);
+
+    }
+
+    public function follows(User $user){
+
+        $foundUsers = $this->userService->FindFollows($user);
+
+        return view('profile.follows', ['foundUsers' => $foundUsers, 'user' => $user]);
 
     }
 }

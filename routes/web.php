@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     // -----SUBSCRIPTIONS
     Route::post('/follow', [UserController::class, 'follow'])->name('follow');
     Route::get('/followers/{user}', [UserController::class, 'followers'])->name('followers');
+    Route::get('/follows/{user}', [UserController::class, 'follows'])->name('follows');
     
 });
 

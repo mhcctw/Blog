@@ -12,15 +12,36 @@ class UserServiceDefault implements UserService{
     public static function FindSearch(String $searchText){
 
         $foundUsers = User::where('name', 'like', "%$searchText%")->get();
+
         $result = self::ShowUsers($foundUsers);
         return $result;
     }
 
     public static function FindFollowers(User $user){
 
+        $subscribers = $user->subscribers;
+
+        $foundUsers = collect();
+        foreach ($subscribers as $subscriber) {
+            $foundUsers->push($subscriber->FollowerIdentification);
+        }
+
+        $result = self::ShowUsers($foundUsers);
+        return $result;
+
     }
 
     public static function FindFollows(User $user){
+
+        $subscriptions = $user->subscriptions;
+
+        $foundUsers = collect();
+        foreach ($subscriptions as $subscription) {
+            $foundUsers->push($subscription->FollowIdentification);
+        }
+
+        $result = self::ShowUsers($foundUsers);
+        return $result;
 
     }
 

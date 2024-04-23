@@ -71,10 +71,10 @@
 
                 {{-- Follows and Followers --}}
                 <div class="main-button" style="margin-bottom: 20px">
-                    <a href="/followers/{{$user['id']}}">Followers</a>
+                    <a href="/followers/{{$user['id']}}">{{count($user->subscribers) }} {{ (count($user->subscribers)==1)? 'Follower' : 'Followers' }}</a>
                 </div>
                 <div class="main-button" style="margin-bottom: 20px">
-                  <a href="#">Follows</a>
+                  <a href="/follows/{{$user['id']}}">{{ count($user->subscriptions) }} {{ count($user->subscriptions) === 1 ? 'Follow' : 'Follows' }}</a>
                 </div>
                 {{-- End Follows and Followers --}}
 

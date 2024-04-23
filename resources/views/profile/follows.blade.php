@@ -8,13 +8,13 @@
 
               @if ($user->id == Auth::user()->id)
 
-                <h6 style="color: white">followers</h6>
-                <h2>You have {{ count($user->subscribers) }} {{ count($user->subscribers) === 1 ? 'follower' : 'followers' }}:</h2>
+                <h6 style="color: white">follows</h6>
+                <h2>You have {{ count($user->subscriptions) }} {{ count($user->subscriptions) === 1 ? 'follow' : 'follows' }}:</h2>
 
               @else
 
-              <h6 style="color: white">follows</h6>
-              <h2>{{ $user->name }}'s has {{ count($user->subscribers) }} {{ count($user->subscribers) === 1 ? 'follow' : 'follows' }}:</h2>
+                <h6 style="color: white">follows</h6>
+                <h2>{{ $user->name }}'s has {{ count($user->subscriptions) }} {{ count($user->subscriptions) === 1 ? 'follow' : 'follows' }}:</h2>
 
               @endif
               

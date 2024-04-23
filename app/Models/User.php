@@ -51,7 +51,7 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'user_id', 'id')->orderBy('created_at', 'desc');        
     }
 
-    // All user's subscriptions
+    // All user's subscribers
     public function subscribers()
     {
         return $this->hasMany(Subscription::class, 'follow')->orderBy('created_at', 'desc');

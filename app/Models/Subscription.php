@@ -13,4 +13,16 @@ class Subscription extends Model
         'user_id',
         'follow'
     ];
+
+    // FindFollowers method in UserService
+    public function FollowerIdentification()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // FindFollows method in UserService
+    public function FollowIdentification()
+    {
+        return $this->belongsTo(User::class, 'follow');
+    }
 }
