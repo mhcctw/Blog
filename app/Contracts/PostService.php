@@ -8,7 +8,7 @@ use App\Models\User;
 
 interface PostService
 {
-    public static function ShowPosts(Object $posts, User $user);
+    public function ShowPosts(Object $posts, User $user);
 }
 
 ?>

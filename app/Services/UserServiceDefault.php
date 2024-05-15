@@ -3,13 +3,15 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\Subscription;
 use App\Contracts\UserService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Expr\Cast\Object_;
 
 class UserServiceDefault implements UserService{
 
-    public static function FindSearch(String $searchText){
+    public function FindSearch(String $searchText){
 
         $foundUsers = User::where('name', 'like', "%$searchText%")->get();
 
@@ -17,37 +19,27 @@ class UserServiceDefault implements UserService{
         return $result;
     }
 
-    public static function FindFollowers(User $user){
+    public function FindFollowers(User $user){
 
-        $subscribers = $user->subscribers;
+        $subscribers = $user->subscribersUsers;
 
-        $foundUsers = collect();
-        foreach ($subscribers as $subscriber) {
-            $foundUsers->push($subscriber->FollowerIdentification);
-        }
-
-        $result = self::ShowUsers($foundUsers);
+        $result = self::ShowUsers($subscribers);
         return $result;
 
     }
 
-    public static function FindFollows(User $user){
+    public function FindFollows(User $user){
 
-        $subscriptions = $user->subscriptions;
+        $subscriptions = $user->subscriptionsUsers;
 
-        $foundUsers = collect();
-        foreach ($subscriptions as $subscription) {
-            $foundUsers->push($subscription->FollowIdentification);
-        }
-
-        $result = self::ShowUsers($foundUsers);
+        $result = self::ShowUsers($subscriptions);
         return $result;
 
     }
 
-    public static function ShowUsers(Object $users){
+    public function ShowUsers(Object $users){        
 
-        $result = '<p>No users</p>';
+        
 
         if(count($users)==0){
 
@@ -64,7 +56,7 @@ class UserServiceDefault implements UserService{
                 // image
                 $result.= '<div class="col-lg-3">
                             <div class="image">
-                                <img src="'.(!empty($user['photo']) ? url('assets/images/avatars/'.$user['photo']) : url('assets/images/no_image.png')).'" alt="Avatar">
+                                <img src="'.(!empty($user->photo) ? url('assets/images/avatars/'.$user->photo) : url('assets/images/no_image.png')).'" alt="Avatar">
                             </div>
                         </div>';
     
@@ -108,7 +100,6 @@ class UserServiceDefault implements UserService{
         
 
         return html_entity_decode($result);
-        // return $result;
 
     }
 

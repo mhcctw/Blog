@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PostServiceDefault implements PostService
 {
-    public static function ShowPosts(Object $posts, User $user){
+    public function ShowPosts(Object $posts, User $user){
         if(count($posts)==0){
 
             if($user->id==Auth::user()->id){
