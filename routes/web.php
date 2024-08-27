@@ -49,6 +49,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/deletePost/{post}', [PostController::class, 'deletePost']);
     Route::get('/editPost/{post}', [PostController::class, 'ShowEditPost']);
     Route::put('/updatePost/{post}', [PostController::class, 'UpdatePost'])->name('updatePost');
+    Route::post('/likePost', [PostController::class, 'likePost'])->name('likePost');
+    Route::post('/unlikePost', [PostController::class, 'unlikePost'])->name('unlikePost');
+
 
     // -----SUBSCRIPTIONS
     Route::post('/follow', [UserController::class, 'follow'])->name('follow');

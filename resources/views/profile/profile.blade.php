@@ -70,11 +70,12 @@
             <div class="col-lg-2 col-md-4 col-sm-4 order-sm-2 order-md-2 order-lg-3" >
 
                 {{-- Follows and Followers --}}
-                <div class="main-button" style="margin-bottom: 20px">
-                    <a href="/followers/{{$user['id']}}">{{count($user->subscribers) }} {{ count($user->subscribers) === 1 ? 'Follower' : 'Followers' }}</a>
-                </div>
+               
                 <div class="main-button" style="margin-bottom: 20px">
                   <a href="/follows/{{$user['id']}}">{{ count($user->subscriptions) }} {{ count($user->subscriptions) === 1 ? 'Follow' : 'Follows' }}</a>
+                </div>
+                <div class="main-button" style="margin-bottom: 20px">
+                  <a id='subscribers-count' href="/followers/{{$user['id']}}">{{count($user->subscribers) }} {{ count($user->subscribers) === 1 ? 'Follower' : 'Followers' }}</a>
                 </div>
                 {{-- End Follows and Followers --}}
 
@@ -115,6 +116,7 @@
   // Send Post
   $(document).ready(function () {
 
+    //new post
     $('#contact-form').submit(function (e) {
 
       e.preventDefault();
@@ -151,7 +153,7 @@
         data: formData,
         success: function (response) {
 
-          console.log(response);
+          // console.log(response);
 
           if(!response.error){
 
@@ -163,6 +165,11 @@
               $('#follow_btn').addClass('white-btn');
               $('#follow_btn').removeClass('violet-btn');
             }
+
+            let num = response.count;
+            num == 1 ? num+=' Follower' : num+=' Followers'
+
+            $('#subscribers-count').html(num);
 
           }else{
             alert('Sorry, something went wrong... Try againt later.')
@@ -177,6 +184,61 @@
       });
 
       });
+
+
+
+
+    // like
+    $(document).on('click', '.like-btn', function(e) {
+      
+      e.preventDefault();
+      var post = $(this).data('post'); 
+      console.log(post);
+
+      $.ajax({
+        url: '{{ route("likePost") }}', 
+        type: 'POST', 
+        data: {
+            post_id: post,
+            _token: '{{ csrf_token() }}'
+        }, 
+        success: function (response) {
+
+          $('#category-'+post).html(response.like);
+
+        },
+        error: function (xhr, status, error) {
+          console.error(xhr.responseText); 
+        }
+      });
+
+    });
+
+    // unlike
+    $(document).on('click', '.unlike-btn', function(e) {
+      
+      e.preventDefault();
+      var post = $(this).data('post'); 
+      console.log(post);
+
+      $.ajax({
+        url: '{{ route("unlikePost") }}', 
+        type: 'POST', 
+        data: {
+            post_id: post,
+            _token: '{{ csrf_token() }}'
+        }, 
+        success: function (response) {
+
+          $('#category-'+post).html(response.like);
+
+        },
+        error: function (xhr, status, error) {
+          console.error(xhr.responseText); 
+        }
+      });
+
+    });
 
 
   });

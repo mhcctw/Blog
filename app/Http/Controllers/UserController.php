@@ -155,8 +155,7 @@ class UserController extends Controller
 
         $searchText = strip_tags($inputFields['searchText']);
 
-        $foundUsersOld = User::where('name', 'like', "%$searchText%")->get();   
-        
+        // $foundUsersOld = User::where('name', 'like', "%$searchText%")->get();           
         
         $foundUsers = $this->userService->FindSearch($searchText);
 
@@ -181,7 +180,9 @@ class UserController extends Controller
                 ->where('follow', $user_id)
                 ->delete();
 
-                return response()->json(['text' => 'Follow', 'error' => 0]);
+                $num = count(User::find($user_id)->subscribers);
+
+                return response()->json(['text' => 'Follow','count' =>$num, 'error' => 0]);
 
             }else{// follow
 
@@ -189,8 +190,9 @@ class UserController extends Controller
                     'user_id' => $auth_user_id,
                     'follow' => $user_id 
                 ]);
+                $num = count(User::find($user_id)->subscribers);
 
-                return response()->json(['text' => 'Unfollow', 'error' => 0]);
+                return response()->json(['text' => 'Unfollow','count' =>$num, 'error' => 0]);
             } 
 
         }else{

@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Contracts\LikeService;
 use App\Contracts\PostService;
-use App\Services\PostServiceDefault;
 use App\Contracts\UserService;
+use App\Services\LikeServiceDefault;
+use App\Services\PostServiceDefault;
 use App\Services\UserServiceDefault;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(PostService::class, PostServiceDefault::class);
         $this->app->bind(UserService::class, UserServiceDefault::class);
+        $this->app->bind(LikeService::class, LikeServiceDefault::class);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Contracts\LikeService;
 use App\Contracts\PostService;
 use App\Services\PostServiceDefault;
 use Illuminate\Support\Facades\Auth;
@@ -12,10 +13,12 @@ use Illuminate\Support\Facades\Auth;
 class PostController extends Controller
 {
     protected $postService;
+    protected $likeService;
 
-    public function __construct(PostService $postService)
+    public function __construct(PostService $postService, LikeService $likeService)
     {
         $this->postService = $postService;
+        $this->likeService = $likeService;
     }
     
     public function createPost(Request $request){
@@ -79,5 +82,50 @@ class PostController extends Controller
 
 
     }// end method UpdatePost
+    
+
+    // ____________________ LIKES
+
+    public function likePost(Request $request){
+        $inputFields = $request->validate([
+            'post_id' => 'required|int'
+        ]);
+
+        $user = Auth::user();
+
+        if($user){
+
+            $post = Post::find($inputFields['post_id']);
+                        
+            $result = $this->likeService->AddLike($user, $post);
+
+            return response()->json(['like' => $result]);
+
+        }else{
+            return view('login');
+        }
+
+        
+    }
+    public function unlikePost(Request $request){
+        $inputFields = $request->validate([
+            'post_id' => 'required|int'
+        ]);
+
+        $user = Auth::user();
+
+        if($user){
+
+            $post = Post::find($inputFields['post_id']);
+                        
+            $result = $this->likeService->RemoveLike($user, $post);
+
+            return response()->json(['like' => $result]);
+
+        }else{
+            return view('login');
+        }        
+    }
+    // ____________________ END OF LIKES
     
 }

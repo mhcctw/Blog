@@ -37,8 +37,8 @@ class UserServiceDefault implements UserService{
 
     }
 
-    public function ShowUsers(Object $users){        
-
+    // user list
+    public function ShowUsers(Object $users){   
         
 
         if(count($users)==0){

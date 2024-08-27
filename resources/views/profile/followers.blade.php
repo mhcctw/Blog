@@ -14,7 +14,7 @@
               @else
 
               <h6 style="color: white">follows</h6>
-              <h2>{{ $user->name }}'s has {{ count($user->subscribers) }} {{ count($user->subscribers) === 1 ? 'follow' : 'follows' }}:</h2>
+              <h2>{{ $user->name }} has {{ count($user->subscribers) }} {{ count($user->subscribers) === 1 ? 'follow' : 'follows' }}:</h2>
 
               @endif
               
