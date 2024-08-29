@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MainPageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -16,9 +17,11 @@ use App\Http\Controllers\UserController;
 */
 
 // Route::get('/', [UserController::class, 'index']);
-Route::get('/', function(){
-    return view('index');
-});
+// Route::get('/', function(){
+//     return view('index');
+// });
+
+Route::get('/', [MainPageController::class, 'MainPage']);
 
 Route::get('/search', [UserController::class, 'search']);
 

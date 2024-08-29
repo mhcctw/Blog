@@ -82,7 +82,7 @@ class UserController extends Controller
 
         // $userAuth = Auth::user();
         $posts = $user->UsersPosts;
-        $ShowPosts = $this->postService->ShowPosts($posts, $user);        
+        $ShowPosts = $this->postService->ShowUserPosts($posts, $user);        
 
         return view('profile.profile', ['user' => $user, 'posts' => $ShowPosts] );
 
