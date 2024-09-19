@@ -39,7 +39,18 @@ class PostServiceMoreFunctions implements PostService
 
     }// end ShowUserPosts
 
-    
+    // main page posts
+    public function ShowPosts(Object $posts){
+
+        $string = '';
+
+        foreach ($posts as $post) {
+            $string .= $this->generatePostHtml($post);
+        }
+
+        return html_entity_decode($string);
+
+    }//end ShowPosts
 
     public function generateNoPostsMessage(User $user){
 
@@ -90,7 +101,17 @@ class PostServiceMoreFunctions implements PostService
 
             // user's avatar                
             $string .= '<div class="col-lg-1">
-                            <img style="border-radius:50%; max-width:100px;" src="'.(!empty($user->photo) ? url('assets/images/avatars/'.$post->user->photo) : url('assets/images/no_image.png')).'" alt="avatar">
+                            <a href="/profile/'.$user->id.'" 
+                                style = "position:relative;
+                                background-color:transparent;
+                                line-height:0px;
+                                top:0px;
+                                width:fit-content;
+                                height:fit-content;
+                                ">
+
+                                <img style="border-radius:50%; max-width:100px;" src="'.(!empty($user->photo) ? url('assets/images/avatars/'.$post->user->photo) : url('assets/images/no_image.png')).'" alt="avatar">
+                            </a>
                         </div>';
 
             // name and date

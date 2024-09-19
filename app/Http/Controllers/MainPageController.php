@@ -15,12 +15,25 @@ class MainPageController extends Controller
     public function __construct(PostService $postService, MainPageContentService $mainPageContentService)
     {
         $this->postService = $postService;
-        $this->postService = $mainPageContentService;
+        $this->mainPageContentService = $mainPageContentService;
     }
 
     public function MainPage(){
 
-        // $posts = $this->mainPageContentService->GetContent();
-        return view('index');
+        if(Auth::user()){
+
+            $posts = $this->mainPageContentService->GetContent();
+
+            $htmlPosts = $this->postService->ShowPosts($posts);
+
+            $header = 'Your Feed:';
+
+            return view('index', ['posts' => $htmlPosts, 'header' => $header]);
+            
+        }else{
+            return view('index', ['posts' => '']);
+        }
+
+        
     }
 }

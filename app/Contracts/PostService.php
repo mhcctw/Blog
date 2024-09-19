@@ -11,6 +11,8 @@ interface PostService
 {
     public function ShowUserPosts(Object $posts, User $user);
 
+    public function ShowPosts(Object $posts);
+
     public function generateNoPostsMessage(User $user);
 
     public function generatePostsHeader(User $user);
