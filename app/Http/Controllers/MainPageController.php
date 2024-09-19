@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Contracts\PostService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use App\Contracts\MainPageContentService;
 
 class MainPageController extends Controller
@@ -20,18 +22,20 @@ class MainPageController extends Controller
 
     public function MainPage(){
 
-        if(Auth::user()){
+        $posts = $this->mainPageContentService->GetContent();
+        $htmlPosts = $this->postService->ShowPosts($posts);
 
-            $posts = $this->mainPageContentService->GetContent();
-
-            $htmlPosts = $this->postService->ShowPosts($posts);
+        if(Auth::user()){ 
 
             $header = 'Your Feed:';
 
             return view('index', ['posts' => $htmlPosts, 'header' => $header]);
             
         }else{
-            return view('index', ['posts' => '']);
+
+            $header = 'Most Popular Blabs:';
+
+            return view('index', ['posts' => $htmlPosts, 'header' => $header]);
         }
 
         

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
 use App\Contracts\MainPageContentService;
+use Illuminate\Support\Facades\Redis;
 
 class MainPageContentServiceDefault implements MainPageContentService{
 
@@ -40,6 +41,13 @@ class MainPageContentServiceDefault implements MainPageContentService{
 
     public function GetContentGuest(){
 
+        $topPosts = Redis::zrevrange('post:likes', 0, 4);
+        // dd($topPosts);
+        $posts = Post::whereIn('id', $topPosts)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+        return $posts;
     }
 }
 

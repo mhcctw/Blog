@@ -11,9 +11,16 @@ use Illuminate\Support\Facades\Redis;
 
 class LikeServiceDefault implements LikeService{
 
-    public function ShowLike(User $user, Post $post){      
+    public function ShowLike(User $user = null, Post $post){   
+        
+        if($user == null){
+            $bool = false;
 
-        $bool = self::FindLike($user, $post);
+        }else{
+
+            $bool = self::FindLike($user, $post);
+        }
+
 
         // without like
         if(!$bool){
@@ -65,6 +72,7 @@ class LikeServiceDefault implements LikeService{
         try {
             
             Redis::sadd('post:'.$post->id.':likes', $user->id);
+            Redis::zincrby('post:likes', 1, $post->id);
 
             $string = self::BtnWithLike($post);
 
@@ -79,6 +87,7 @@ class LikeServiceDefault implements LikeService{
     public function RemoveLike(User $user, Post $post){
 
         Redis::srem('post:'.$post->id.':likes', $user->id);
+        Redis::zincrby('post:likes', -1, $post->id);
 
         $string = self::BtnWithoutLike($post);
 

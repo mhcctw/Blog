@@ -99,73 +99,71 @@ class PostServiceMoreFunctions implements PostService
                             <div class="item">
                                 <div class="row">';
 
-            // user's avatar                
-            $string .= '<div class="col-lg-1">
-                            <a href="/profile/'.$user->id.'" 
-                                style = "position:relative;
-                                background-color:transparent;
-                                line-height:0px;
-                                top:0px;
-                                width:fit-content;
-                                height:fit-content;
-                                ">
+        // user's avatar                
+        $string .= '<div class="col-lg-1">
+                        <a href="/profile/'.$user->id.'" 
+                            style = "position:relative;
+                            background-color:transparent;
+                            line-height:0px;
+                            top:0px;
+                            width:fit-content;
+                            height:fit-content;
+                            ">
 
-                                <img style="border-radius:50%; max-width:100px;" src="'.(!empty($user->photo) ? url('assets/images/avatars/'.$post->user->photo) : url('assets/images/no_image.png')).'" alt="avatar">
-                            </a>
-                        </div>';
+                            <img style="border-radius:50%; max-width:100px;" src="'.(!empty($user->photo) ? url('assets/images/avatars/'.$post->user->photo) : url('assets/images/no_image.png')).'" alt="avatar">
+                        </a>
+                    </div>';
 
-            // name and date
-            $string .= '<div class="col-lg-2">              
-                            <h6 class="">'.$post->user->name.'</h6> <br>
-                            <p>'.$post['created_at'].'</p>
-                        </div>';
+        // name and date
+        $string .= '<div class="col-lg-2">              
+                        <h6 class="">'.$post->user->name.'</h6> <br>
+                        <p>'.$post['created_at'].'</p>
+                    </div>';
 
-            // text
-            $string .= '<div class="col-lg-8">
-                            <span class="category">'.$post['text'].'</span>
-                        </div>';
+        // text
+        $string .= '<div class="col-lg-8">
+                        <span class="category">'.$post['text'].'</span>
+                    </div>';
 
-            // stars - likes
-            $string .= '<div class="col-lg-1 text-center">
-                            <span class="category" id="category-'.$post['id'].'">';
-                            
-            $string .= $this->likeService->ShowLike(Auth::user(), $post); // like Service (Redis)
-                
-            $string .='</span>
-                        </div>';
+        // stars - likes
+        $string .= '<div class="col-lg-1 text-center">
+                        <span class="category" id="category-'.$post['id'].'">';
+                        
+        $string .= $this->likeService->ShowLike(Auth::user(), $post); // like Service (Redis)
+            
+        $string .='</span>
+                    </div>';
 
-            $string.='</div>
-                    </div> ';
+        $string.='</div>
+                </div> ';
 
 
-            // Edit and Delete
-            $userAuth = Auth::user();
+        // Edit and Delete
 
-            if($user->id==$userAuth->id){
-                
-                $string.='<div style = "padding:0 40px;">
-                            <div class = "row">
-                                <div class = "col-1 text-center">
-                                    <a href = "/editPost/'. $post['id'] .'"> Edit </a>
-                                </div>
-                                <div class = "col-1 text-center">
-                                    |
-                                </div>
-
-                                <div class = "col-1 text-center">                                    
-                                    <form method = "POST" action = "/deletePost/'. $post['id'] .'"> 
-                                        '.csrf_field().'                                  
-                                        <button type = "submit" style="padding: 0;
-                                            border: none;
-                                            font: inherit;
-                                            color: #007aff; 
-                                            background-color: transparent;"> Delete </button>
-                                    </form>
-                                </div>
+        if(Auth::user() && $user->id==Auth::user()->id){
+        
+            $string.='<div style = "padding:0 40px;">
+                        <div class = "row">
+                            <div class = "col-1 text-center">
+                                <a href = "/editPost/'. $post['id'] .'"> Edit </a>
                             </div>
-                        </div>';
-            }
+                            <div class = "col-1 text-center">
+                                |
+                            </div>
 
+                            <div class = "col-1 text-center">                                    
+                                <form method = "POST" action = "/deletePost/'. $post['id'] .'"> 
+                                    '.csrf_field().'                                  
+                                    <button type = "submit" style="padding: 0;
+                                        border: none;
+                                        font: inherit;
+                                        color: #007aff; 
+                                        background-color: transparent;"> Delete </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>';
+        }
                                 
         $string.='</div>';
 
