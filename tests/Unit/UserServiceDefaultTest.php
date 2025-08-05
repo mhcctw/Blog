@@ -21,7 +21,7 @@ class UserServiceDefaultTest extends BaseTestCase
      */
     public function createApplication()
     {
-        $app = require '/var/www/blog (copy)/bootstrap/app.php';
+        $app = require '/var/www/blog/bootstrap/app.php';
         $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
         return $app;
     }
