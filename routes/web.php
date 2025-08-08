@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MainPageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
@@ -52,8 +53,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/deletePost/{post}', [PostController::class, 'deletePost']);
     Route::get('/editPost/{post}', [PostController::class, 'ShowEditPost']);
     Route::put('/updatePost/{post}', [PostController::class, 'UpdatePost'])->name('updatePost');
-    Route::post('/likePost', [PostController::class, 'likePost'])->name('likePost');
-    Route::post('/unlikePost', [PostController::class, 'unlikePost'])->name('unlikePost');
+
+    // -----LIKES
+    Route::post('/likePost', [LikeController::class, 'likePost'])->name('likePost');
+    Route::post('/unlikePost', [LikeController::class, 'unlikePost'])->name('unlikePost');
 
 
     // -----SUBSCRIPTIONS

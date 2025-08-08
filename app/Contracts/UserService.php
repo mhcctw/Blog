@@ -9,13 +9,13 @@ use PhpParser\Node\Expr\Cast\Object_;
 
 interface UserService
 {
-    public function FindSearch(String $searchText);
+    public function FindSearch(String $searchText): string;
 
-    public function FindFollowers(User $user);
+    public function FindFollowers(User $user): string;
 
-    public function FindFollows(User $user);
+    public function FindFollows(User $user): string;
 
-    public function ShowUsers(Object $users);
+    public function ShowUsers(Object $users): string;
 }
 
 ?>

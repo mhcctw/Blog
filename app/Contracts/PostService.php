@@ -9,15 +9,15 @@ use App\Models\User;
 
 interface PostService
 {
-    public function ShowUserPosts(Object $posts, User $user);
+    public function ShowUserPosts(Object $posts, User $user): string;
 
-    public function ShowPosts(Object $posts);
+    public function ShowPosts(Object $posts): string;
 
-    public function generateNoPostsMessage(User $user);
+    public function generateNoPostsMessage(User $user): string;
 
-    public function generatePostsHeader(User $user);
+    public function generatePostsHeader(User $user): string;
 
-    public function generatePostHtml(Post $post);    
+    public function generatePostHtml(Post $post): string;    
     
 }
 

@@ -13,7 +13,7 @@ use PhpParser\Node\Expr\Cast\Object_;
 
 class PostServiceMoreFunctions implements PostService
 {
-    protected $likeService;
+    protected LikeService $likeService;
 
     public function __construct(LikeService $likeService)
     {
@@ -21,7 +21,8 @@ class PostServiceMoreFunctions implements PostService
     }
     
     // function for profile page
-    public function ShowUserPosts(Object $posts, User $user){
+    public function ShowUserPosts(Object $posts, User $user): string
+    {
 
         $string = '';
 
@@ -40,7 +41,8 @@ class PostServiceMoreFunctions implements PostService
     }// end ShowUserPosts
 
     // main page posts
-    public function ShowPosts(Object $posts){
+    public function ShowPosts(Object $posts): string
+    {
 
         $string = '';
 
@@ -52,7 +54,8 @@ class PostServiceMoreFunctions implements PostService
 
     }//end ShowPosts
 
-    public function generateNoPostsMessage(User $user){
+    public function generateNoPostsMessage(User $user): string
+    {
 
         if($user->id==Auth::user()->id){
             $string = '<div class="col-lg-12 text-center">
@@ -71,7 +74,8 @@ class PostServiceMoreFunctions implements PostService
 
     }// end generateNoPostsMessage
 
-    public function generatePostsHeader(User $user){
+    public function generatePostsHeader(User $user): string
+    {
 
         if($user->id==Auth::user()->id){
             $string = '<div class="col-lg-12 text-center">
@@ -90,7 +94,8 @@ class PostServiceMoreFunctions implements PostService
 
     }// end generatePostsHeader
 
-    public function generatePostHtml(Post $post){
+    public function generatePostHtml(Post $post): string
+    {
 
         // $user = User::find($post->user_id);
         $user = $post->user;
@@ -129,7 +134,7 @@ class PostServiceMoreFunctions implements PostService
         $string .= '<div class="col-lg-1 text-center">
                         <span class="category" id="category-'.$post['id'].'">';
                         
-        $string .= $this->likeService->ShowLike(Auth::user(), $post); // like Service (Redis)
+        $string .= $this->likeService->ShowLike($post, Auth::user()); // like Service (Redis)
             
         $string .='</span>
                     </div>';

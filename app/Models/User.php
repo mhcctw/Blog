@@ -4,10 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post> $usersPosts
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $subscribers
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $subscribersUsers
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $subscriptionsUsers
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -46,31 +54,47 @@ class User extends Authenticatable
     ];
 
     // All user's posts
-    public function UsersPosts(){
+    /**
+     * @return HasMany<Post>
+     */
+    public function usersPosts(): HasMany
+    {
 
         return $this->hasMany(Post::class, 'user_id', 'id')->orderBy('created_at', 'desc');        
     }
 
     // All user's subscribers with information
-    public function subscribersUsers()
+    /**
+     * @return BelongsToMany<User>
+     */
+    public function subscribersUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'subscriptions', 'follow', 'user_id');
     }
 
     // All user's count subscribers
-    public function subscribers()
+    /**
+     * @return HasMany<Subscription>
+     */
+    public function subscribers(): HasMany
     {
         return $this->hasMany(Subscription::class, 'follow')->orderBy('created_at', 'desc');
     }
 
     // All user's subscriptions with information
-    public function subscriptionsUsers()
+    /**
+     * @return BelongsToMany<User>
+     */
+    public function subscriptionsUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'subscriptions', 'user_id', 'follow');
     }
 
     // All user's count subscriptions
-    public function subscriptions()
+    /**
+     * @return HasMany<Subscription>
+     */
+    public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class, 'user_id')->orderBy('created_at', 'desc');
     }

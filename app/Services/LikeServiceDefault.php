@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Redis;
 
 class LikeServiceDefault implements LikeService{
 
-    public function ShowLike(User $user = null, Post $post){   
+    public function ShowLike(Post $post, ?User $user = null): string
+    {   
         
         if($user == null){
             $bool = false;
@@ -35,7 +36,8 @@ class LikeServiceDefault implements LikeService{
 
     }
 
-    public function FindLike(User $user, Post $post){
+    public function FindLike(User $user, Post $post): bool
+    {
 
         $hasLiked = Redis::sismember('post:' . $post->id . ':likes', $user->id);
         return $hasLiked;
@@ -43,7 +45,8 @@ class LikeServiceDefault implements LikeService{
     } 
     
     // HTML with like
-    public function BtnWithLike(Post $post){
+    public function BtnWithLike(Post $post): string
+    {
         $count = Redis::scard('post:' . $post->id . ':likes');
 
         $string ='<a class="unlike-btn" style="cursor:pointer" data-post="'.$post['id'].'">
@@ -55,7 +58,8 @@ class LikeServiceDefault implements LikeService{
     } 
 
     // HTML without like
-    public function BtnWithoutLike(Post $post){
+    public function BtnWithoutLike(Post $post): string
+    {
 
         $count = Redis::scard('post:' . $post->id . ':likes');
 
@@ -67,7 +71,8 @@ class LikeServiceDefault implements LikeService{
         return $string;
     } 
     
-    public function AddLike(User $user, Post $post){
+    public function AddLike(User $user, Post $post): string
+    {
 
         try {
             
@@ -79,12 +84,13 @@ class LikeServiceDefault implements LikeService{
             return $string;
             
         } catch (Exception $e) {
-            // return 'Error adding like: ' . $e->getMessage();
+            return 'Error adding like: ' . $e->getMessage();
         }
 
     }
 
-    public function RemoveLike(User $user, Post $post){
+    public function RemoveLike(User $user, Post $post): string
+    {
 
         Redis::srem('post:'.$post->id.':likes', $user->id);
         Redis::zincrby('post:likes', -1, $post->id);

@@ -11,7 +11,8 @@ use PhpParser\Node\Expr\Cast\Object_;
 
 class UserServiceDefault implements UserService{
 
-    public function FindSearch(String $searchText){
+    public function FindSearch(String $searchText): string
+    {
 
         $foundUsers = User::where('name', 'like', "%$searchText%")->get();
 
@@ -19,7 +20,7 @@ class UserServiceDefault implements UserService{
         return $result;
     }
 
-    public function FindFollowers(User $user){
+    public function FindFollowers(User $user): string{
 
         $subscribers = $user->subscribersUsers;
 
@@ -28,7 +29,7 @@ class UserServiceDefault implements UserService{
 
     }
 
-    public function FindFollows(User $user){
+    public function FindFollows(User $user): string{
 
         $subscriptions = $user->subscriptionsUsers;
 
@@ -38,8 +39,8 @@ class UserServiceDefault implements UserService{
     }
 
     // user list
-    public function ShowUsers(Object $users){   
-        
+    public function ShowUsers(Object $users): string
+    {           
 
         if(count($users)==0){
 

@@ -12,13 +12,16 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 use App\Services\PostServiceDefault;
 use App\Services\UserServiceDefault;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    protected $postService;
-    protected $userService;
+    protected PostService $postService;
+    protected UserService $userService;
 
     public function __construct(PostService $postService, UserService $userService)
     {
@@ -26,7 +29,8 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function register(Request $request){
+    public function register(Request $request): RedirectResponse
+    {
 
         $inputFields = $request -> validate([
             'name' => ['required', 'min:3', Rule::unique('users', 'name')],
@@ -49,7 +53,8 @@ class UserController extends Controller
     }// end register method
 
 
-    public function login(Request $request){
+    public function login(Request $request): RedirectResponse
+    {
 
         $inputFields = $request -> validate([            
             'email' => ['required', 'email'],
@@ -68,34 +73,38 @@ class UserController extends Controller
             return redirect()->back()->withErrors($errors);
         }
 
-        return redirect('/login');        
+        // return redirect('/login');        
         
     }// end login method
 
 
-    public function logout(){
+    public function logout(): RedirectResponse
+    {
         auth()->logout();
         return redirect('/');
     }// end logout method
 
-    public function profile(User $user){
+    public function profile(User $user): View
+    {
 
         // $userAuth = Auth::user();
-        $posts = $user->UsersPosts;
+        $posts = $user->usersPosts;
         $ShowPosts = $this->postService->ShowUserPosts($posts, $user);        
 
         return view('profile.profile', ['user' => $user, 'posts' => $ShowPosts] );
 
     }//end profile method
 
-    public function edit(){
+    public function edit(): View
+    {
 
         $user = Auth::user();
         return view('profile.edit', ['user' => $user]);
 
     }//end edit method (opens view to edit)
 
-    public function saveEditProfile(Request $request) {
+    public function saveEditProfile(Request $request): View
+    {
         $id = Auth::user()->id;
         $data = User::find($id);
 
@@ -117,7 +126,8 @@ class UserController extends Controller
         
     }//end saveEditProfile method 
 
-    public function changePassword(Request $request){
+    public function changePassword(Request $request): View|RedirectResponse
+    {
 
         $inputFields = $request -> validate([
             'password' => ['required', 'min:8'],
@@ -142,12 +152,13 @@ class UserController extends Controller
         $data->save(); 
 
         
-        $posts = $user->UsersPosts;
+        $posts = $user->usersPosts;
         return view('profile.profile', ['user' => $user, 'posts' => $posts]);
 
     }//end changePassword method 
 
-    public function search(Request $request){
+    public function search(Request $request): View
+    {
 
         $inputFields = $request->validate([
             'searchText' => 'required'
@@ -164,7 +175,7 @@ class UserController extends Controller
     }//end search method
 
     // Follow user button
-    public function follow(Request $request){
+    public function follow(Request $request): JsonResponse{
 
         $user_id = $request['user_id'];
         $auth_user_id = Auth::user()->id;
@@ -201,7 +212,7 @@ class UserController extends Controller
 
     }//end follow method
 
-    public function followers(User $user){
+    public function followers(User $user): View{
 
         $foundUsers = $this->userService->FindFollowers($user);
 
@@ -209,7 +220,7 @@ class UserController extends Controller
 
     }
 
-    public function follows(User $user){
+    public function follows(User $user): View{
 
         $foundUsers = $this->userService->FindFollows($user);
 

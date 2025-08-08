@@ -10,17 +10,17 @@ use PhpParser\Node\Expr\Cast\Object_;
 
 interface LikeService
 {
-    public function ShowLike(User $user, Post $post);
+    public function ShowLike(Post $post, ?User $user): string;
     
-    public function FindLike(User $user, Post $post);
+    public function FindLike(User $user, Post $post): bool;
 
-    public function BtnWithLike(Post $post);
+    public function BtnWithLike(Post $post): string;
 
-    public function BtnWithoutLike(Post $post);
+    public function BtnWithoutLike(Post $post): string;
 
-    public function AddLike(User $user, Post $post);
+    public function AddLike(User $user, Post $post): string;
 
-    public function RemoveLike(User $user, Post $post);
+    public function RemoveLike(User $user, Post $post): string;
 }
 
 ?>

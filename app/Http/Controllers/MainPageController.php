@@ -8,11 +8,12 @@ use App\Contracts\PostService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
 use App\Contracts\MainPageContentService;
+use Illuminate\View\View;
 
 class MainPageController extends Controller
 {
-    protected $postService;
-    protected $mainPageContentService;
+    protected PostService $postService;
+    protected MainPageContentService $mainPageContentService;
 
     public function __construct(PostService $postService, MainPageContentService $mainPageContentService)
     {
@@ -20,7 +21,8 @@ class MainPageController extends Controller
         $this->mainPageContentService = $mainPageContentService;
     }
 
-    public function MainPage(){
+    public function MainPage(): View
+    {
 
         $posts = $this->mainPageContentService->GetContent();
         $htmlPosts = $this->postService->ShowPosts($posts);

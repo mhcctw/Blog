@@ -8,10 +8,12 @@ use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
 use App\Contracts\MainPageContentService;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Database\Eloquent\Collection;
 
 class MainPageContentServiceDefault implements MainPageContentService{
 
-    public function GetContent(){
+    public function GetContent(): Collection
+    {
 
         $user = Auth::user();
 
@@ -24,7 +26,8 @@ class MainPageContentServiceDefault implements MainPageContentService{
         return $posts;
     }
 
-    public function GetContentAuth(User $user){
+    public function GetContentAuth(User $user): Collection
+    {
 
         // followed users ids
         $followedUsersIds = Subscription::where('user_id', $user->id)
@@ -39,7 +42,8 @@ class MainPageContentServiceDefault implements MainPageContentService{
         return $posts;        
     }
 
-    public function GetContentGuest(){
+    public function GetContentGuest(): Collection
+    {
 
         $topPosts = Redis::zrevrange('post:likes', 0, 4);
         // dd($topPosts);
